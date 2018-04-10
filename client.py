@@ -48,6 +48,7 @@ else:
 	print('Starting client as Auxiliary')
 	r = requests.post(server_addr + ':' + port + '/createDrone')
 	resp = json.loads(r.content)
+	# add error checking
 	print('Position: ' + resp['pos'])
 
 	# wait for commands
