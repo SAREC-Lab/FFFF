@@ -24,7 +24,7 @@ lead_drone = False
 DO_CONT = False
 
 # make sure you change this so that it's correct for your system 
-ARDUPATH = os.path.join('/', 'home', 'bayley', 'git', 'ardupilot')
+ARDUPATH = os.path.join('/', 'home', 'zjanicki', 'git', 'ardupilot')
 
 
 def load_json(path2file):
@@ -142,18 +142,19 @@ def main(path_to_config, ardupath=None):
     while not vehicles[0].is_armable:
         print("Waiting for drone to initialize...")
         time.sleep(1)
-
+	'''
     print("Arming motors")
     vehicles[0].mode = dronekit.VehicleMode("GUIDED")
     vehicles[0].armed = True
 
-    whlie not vehicle.armed:
+    while not vehicle.armed:
         print("Waiting to arm...")
         time.sleep(1)
-
+	'''
     # Connect lead drone to server
     print("Connecting to server as Lead")
     wypts = routes[0]
+    wypts = {'waypoints': wypts}
     r = requests.post('http://' + server_addr + ':' + port + '/createLeadDrone', data=json.dumps(wypts))
     if r.status_code == 200:
         resp = json.loads(r.content)
@@ -176,48 +177,60 @@ def main(path_to_config, ardupath=None):
 
     print("Starting Auxillary Drone 1")
     print("Pre-arm checks")
-    while not vehicles[0].is_armable:
+    while not vehicles[1].is_armable:
         print("Waiting for drone to initialize...")
         time.sleep(1)
 
-    print("Arming motors")
+    print("Arming motors 0")
     vehicles[0].mode = dronekit.VehicleMode("GUIDED")
     vehicles[0].armed = True
 
-    whlie not vehicle.armed:
+    while not vehicles[0].armed:
+        print("Waiting to arm...")
+        time.sleep(1)
+
+    print("Arming motors 1")
+    print("Inside a loop")
+    vehicles[1].mode = dronekit.VehicleMode("GUIDED")
+    vehicles[1].armed = True
+
+    while not vehicles[1].armed:
         print("Waiting to arm...")
         time.sleep(1)
 
     print("Connecting as aux drone 1")
     r = requests.get('http://' + server_addr + ':' + port + '/computeStraightLinePath')
-        if r.status_code == 200:
-                resp = json.loads(r.content)
-                wypts1 = dict(resp['waypoints'])
-                routes.append(wypts1)
-        else:
-                print('Error: {} Response'.format(r.status_code))
+    if r.status_code == 200:
+    	resp = json.loads(r.content)
+        wypts1 = dict(resp['waypoints'])
+        routes.append(wypts1)
+    else:
+        print('Error: {} Response'.format(r.status_code))
 
     # setup should be complete...
     # takeoff
+    counter = 0
     for vehicle in vehicles:
-        vehicle.simple_takeoff(20)
-        # check to make sure we're at a safe height before raising the other ones
+        starting_altitude = 10
+        vehicle.simple_takeoff(starting_altitude) 
+	# check to make sure we're at a safe height before raising the other ones
         while True:
             print(" Altitude: ", vehicle.location.global_relative_frame.alt)
             # Break and return from function just below target altitude.
             if vehicle.location.global_relative_frame.alt >= starting_altitude * 0.95:
-                print("Reached target altitude")
+                print("Reached target altitude for vehicle {}".format(counter))
                 break
             time.sleep(1)
+        counter += 1
 
     # lots of hardcoded stuff, need to change
     # base it off lead drone waypoints
     for i, wypts0 in enumerate(routes[0]):
-        vehicle[0].simple_goto(wypts0, groundspeed=10)
-        vehicle[1].simple_goto(routes[1][i*6], groundspeed=10)
+        vehicles[0].simple_goto(wypts0, groundspeed=10)
+        vehicles[1].simple_goto(routes[1][i*6], groundspeed=10)
 
         for j in range(1,5):
-            vehicle[1].simple_goto(routes[1][j+i*6], groundspeed=10)
+            vehicles[1].simple_goto(routes[1][j+i*6], groundspeed=10)
 
     # wait until ctrl c to exit
     while DO_CONT:

@@ -30,7 +30,7 @@ def computePath(leader_waypoints, offset_id = 1):
 
 
     # gaphing here for visual check of correctness
-    
+    '''
     leader_x = []
     leader_y = []
 
@@ -52,7 +52,7 @@ def computePath(leader_waypoints, offset_id = 1):
         plt.plot(follower1_x[i:i+2], follower1_y[i:i+2], 'go-')
 
     plt.show()
-    
+    '''
 
     total_distance = 0
     for i in range(len(unscaled_path) - 1):

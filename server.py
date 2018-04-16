@@ -25,6 +25,7 @@ def helloWorld():
 def createLeadDrone():
     print 'got request'
     waypoints = json.loads(request.data)
+    print waypoints
     lead_drone.path = waypoints['waypoints']
     drone_list.append(Drone(0))
     resp = {}
