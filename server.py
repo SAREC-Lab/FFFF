@@ -1,6 +1,7 @@
 from flask import Flask, request
 import requests
 import json
+from get_distance_meters import getDistanceMeters
 
 from compute_path import computePath
 
@@ -27,6 +28,12 @@ def createLeadDrone():
     lead_drone.path = waypoints['waypoints']
     drone_list.append(Drone(0))
     resp = {}
+    total_distance = 0
+    print waypoints
+    for i in range(len(lead_drone.path) - 1):
+        total_distance += getDistanceMeters(lead_drone.path[i][0], lead_drone.path[i][1], lead_drone.path[i + 1][0], lead_drone.path[i + 1][1])
+    resp['distance'] = total_distance
+    resp['waypoints'] = lead_drone.path
     resp['text'] = "Creating lead drone"
     resp['result'] = "Success"
     return json.dumps(resp)
@@ -35,7 +42,7 @@ def createLeadDrone():
 def returnComputedStraightLinePath():
     if request.method == 'GET':
         output = computePath(lead_drone.path, 1)
-        return json.dumps(output)
+        return output
     else:
         pass
 
