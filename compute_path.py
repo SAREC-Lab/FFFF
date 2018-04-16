@@ -3,6 +3,7 @@
 #LocationGlobalRelative(lat, lon, vehicles[vindex].location.global_relative_frame.alt)
 
 import math
+import json
 import matplotlib.pyplot as plt
 import pyclipper
 from get_distance_meters import getDistanceMeters
@@ -59,7 +60,7 @@ def computePath(leader_waypoints, offset_id = 1):
         'path': unscaled_path,
         'distance': total_distance
     }
-    return output
+    return json.dumps(output)
 
 '''
 
