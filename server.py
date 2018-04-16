@@ -26,13 +26,16 @@ def createLeadDrone():
     waypoints = json.loads(request.data)
     lead_drone.path = waypoints['waypoints']
     drone_list.append(Drone(0))
-    return "Creating lead drone"
+    resp = {}
+    resp['text'] = "Creating lead drone"
+    resp['result'] = "Success"
+    return json.dumps(resp)
 
 @app.route('/computeStraightLinePath', methods=['GET'])
 def returnComputedStraightLinePath():
     if request.method == 'GET':
         output = computePath(lead_drone.path, 1)
-        return json.dumps({'path': output})
+        return json.dumps(output)
     else:
         pass
 
@@ -41,6 +44,6 @@ def returnComputedPath(drone_id):
     if request.method == 'GET':
         drone_list.append()
         output = computeFlyingVPath(drone_id, drone_list[0].path)
-        return output
+        return json.dumps(output)
     else:
         pass
