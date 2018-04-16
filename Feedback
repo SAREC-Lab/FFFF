@@ -1,0 +1,10 @@
+You are making good progress.  These comments merge Deliverable 1 and 2.  I am a bit confused about the user stories and the roles that are defined.  Some of the user stories seem a bit too design level -- but we will discuss in class tonight.
+
+Initial code base looks good.  Architecture is good (I like the idea of sketching it on the whiteboard).
+
+Just a few comments about the user stories.
+For the first one that states:
+"As a Dronology User, I want a SERVER connection...."
+-- you should try to express this at a higher level.  The notion of a 'server connection' is really associated with the design solution and not the 'requirements'.   
+Its a bit confusing to me here as to 'who' is the user -- normally a user is a person e.g., the operator.  But then I don't fully understand what it means for a user to connect to the server.  I think I'm missing something here - and we can discuss in class tonight.
+I think these are better discussed face to face.
