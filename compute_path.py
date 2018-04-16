@@ -5,23 +5,8 @@
 import math
 import matplotlib.pyplot as plt
 import pyclipper
-from math import sin, cos, atan2, sqrt, radians
+from get_distance_meters import getDistanceMeters
 
-def get_distance_meters(lat1, long1, lat2, long2):
-    lat1 = radians(lat1)
-    lat2 = radians(lat2)
-    long1 = radians(long1)
-    long2 = radians(long2)
-
-    dlong = long2 - long1
-    dlat = lat2 - lat1
-
-    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlong / 2)**2
-
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-    distance = R * c * 1000
-    return distance
 
 def computePath(leader_waypoints, offset_id = 1):
     leader_waypoints = [[w[0], w[1]] for w in leader_waypoints]
@@ -66,8 +51,15 @@ def computePath(leader_waypoints, offset_id = 1):
 
     plt.show()
 
-
-    return unscaled_path
+    total_distance = 0
+    for i in range(len(unscaled_path) - 1):
+        total_distance += getDistanceMeters(unscaled_path[i][0], unscaled_path[i][1], unscaled_path[i + 1][0], unscaled_path[i + 1][1])
+    
+    output = {
+        'path': unscaled_path,
+        'distance': total_distance
+    }
+    return output
 
 '''
 
@@ -151,3 +143,4 @@ plt.show()
 #
 #print rotate(origin, point, 10)
 '''
+
