@@ -2,6 +2,8 @@ import time
 import requests
 import json
 import sys
+from leader_waypoints import wypts
+
 #import dronekit
 #from client_util import DronekitHelpers
 
@@ -55,18 +57,17 @@ if __name__ == '__main__':
     if (lead_drone):
         print('Starting client as Lead')
         print('Position: 0')
-        mywaypoints={'one': 'test'}
-        r = requests.post('http://' + server_addr + ':' + port + '/createLeadDrone') #, data=json.dumps(mywaypoints))
+        r = requests.post('http://' + server_addr + ':' + port + '/createLeadDrone', data=json.dumps(wypts))
         if r.status_code == 200:
                 resp = json.loads(r.content)
         else:
                 print('Error: {} Response'.format(r.status_code))
                 sys.exit(1)
         print(resp) # mostly checking this works
-        waypoints={}
+        waypoints=dict(wypts)
     else:
         print('Starting client as Auxiliary')
-        r = requests.get('http://' + server_addr + ':' + port + '/computeStraightLinePath:2')
+        r = requests.get('http://' + server_addr + ':' + port + '/computeStraightLinePath')
         if r.status_code == 200:
                 resp = json.loads(r.content)
                 waypoints = dict(resp['waypoints'])
