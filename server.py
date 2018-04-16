@@ -35,7 +35,7 @@ def createLeadDrone():
 def returnComputedStraightLinePath():
     if request.method == 'GET':
         output = computePath(lead_drone.path, 1)
-        return json.dumps(output)
+        return output
     else:
         pass
 

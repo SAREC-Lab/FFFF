@@ -1,6 +1,6 @@
 from math import radians, sin, cos, sqrt, atan2
 R = 6373.0
-def get_distance_meters(lat1, long1, lat2, long2):
+def getDistanceMeters(lat1, long1, lat2, long2):
     lat1 = radians(lat1)
     lat2 = radians(lat2)
     long1 = radians(long1)

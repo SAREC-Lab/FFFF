@@ -11,7 +11,7 @@ from get_distance_meters import getDistanceMeters
 
 def computePath(leader_waypoints, offset_id = 1):
     leader_waypoints = [[w[0], w[1]] for w in leader_waypoints]
-    OFFSET_CONSTANT = 70000
+    OFFSET_CONSTANT = 2 * 70000
     ARC_TOLERANCE = 2000
     scaled_waypoints = []
     print leader_waypoints
@@ -57,7 +57,7 @@ def computePath(leader_waypoints, offset_id = 1):
         total_distance += getDistanceMeters(unscaled_path[i][0], unscaled_path[i][1], unscaled_path[i + 1][0], unscaled_path[i + 1][1])
     
     output = {
-        'path': unscaled_path,
+        'waypoints': unscaled_path,
         'distance': total_distance
     }
     return json.dumps(output)

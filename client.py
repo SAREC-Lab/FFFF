@@ -70,7 +70,8 @@ if __name__ == '__main__':
         r = requests.get('http://' + server_addr + ':' + port + '/computeStraightLinePath')
         if r.status_code == 200:
                 resp = json.loads(r.content)
-                waypoints = dict(resp['waypoints'])
+                print type(resp)
+                waypoints = resp#['waypoints'] #dict(resp['waypoints'])
         else:
                 print('Error: {} Response'.format(r.status_code))
                 sys.exit(1)
@@ -93,12 +94,13 @@ if __name__ == '__main__':
 
     print('TAKING OFF')
     #DronekitHelpers.takeoff(drone, alt)
-
-    for wypt in waypoints:
-        lat = float(waypoints[wypt]['lat'])
-        lon = float(waypoints[wypt]['lon'])
-        spd = float(waypoints[wypt]['spd'])
-        print('Flying to: {}, {} at {} kph'.format(lat, lon, spd))
+    print waypoints
+    wypts = waypoints['waypoints']
+    for wypt in wypts:
+        lat = float(wypt[0])
+        lon = float(wypt[1])
+        #spd = float(wypt[2])
+        print('Flying to: {}, {}'.format(lat, lon))
         #DronekitHelpers.goto(drone, lat, lon, alt, spd)
 
     print('Path Complete')
