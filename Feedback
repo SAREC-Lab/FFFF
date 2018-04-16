@@ -8,3 +8,6 @@ For the first one that states:
 -- you should try to express this at a higher level.  The notion of a 'server connection' is really associated with the design solution and not the 'requirements'.   
 Its a bit confusing to me here as to 'who' is the user -- normally a user is a person e.g., the operator.  But then I don't fully understand what it means for a user to connect to the server.  I think I'm missing something here - and we can discuss in class tonight.
 I think these are better discussed face to face.
+
+Score 24/25
+1 points lost for issues with user stories, as these are a key part of the deliverable.  I'll go over these with you in class though.
