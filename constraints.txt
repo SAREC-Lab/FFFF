@@ -1,1 +1,8 @@
- A list of contraints goes in this file
+ A list of contraints goes in this file:
+
+SAFETY CONSTRAINTS:
+	1. Drones will fly at different altitidues to minimize chance of collision
+
+GENERAL PROJECT CONSTRAINTS:
+	1. The lead drone will have a presest path
+	2. The lead drone's preset path will be a convex polygon
