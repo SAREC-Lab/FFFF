@@ -202,7 +202,7 @@ def main(path_to_config, ardupath=None):
     r = requests.get('http://' + server_addr + ':' + port + '/computeStraightLinePath')
     if r.status_code == 200:
     	resp = json.loads(r.content)
-        wypts1 = dict(resp['waypoints'])
+        wypts1 = resp['waypoints']#dict(resp['waypoints'])
         routes.append(wypts1)
     else:
         print('Error: {} Response'.format(r.status_code))
@@ -226,11 +226,17 @@ def main(path_to_config, ardupath=None):
     # lots of hardcoded stuff, need to change
     # base it off lead drone waypoints
     for i, wypts0 in enumerate(routes[0]):
-        vehicles[0].simple_goto(wypts0, groundspeed=10)
-        vehicles[1].simple_goto(routes[1][i*6], groundspeed=10)
+        print routes[1]
+        loc_0 = dronekit.LocationGlobal(wypts0[0], wypts0[1], 10)
+        if i > 4:
+            break
+        loc_1 = dronekit.LocationGlobal(routes[1][i*6][0], routes[1][i*6][1], 10)
+        vehicles[0].simple_goto(loc_0, groundspeed=10)
+        vehicles[1].simple_goto(loc_1, groundspeed=10)
 
         for j in range(1,5):
-            vehicles[1].simple_goto(routes[1][j+i*6], groundspeed=10)
+            location = dronekit.LocationGlobal(routes[1][j+i*6][0], routes[1][j+i*6][1], 10)
+            vehicles[1].simple_goto(location, groundspeed=10)
 
     # wait until ctrl c to exit
     while DO_CONT:
