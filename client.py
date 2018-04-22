@@ -26,7 +26,7 @@ def connect_vehicle(connection_string, baud=57600):
         return vehicle
 
 # Register a callback: if the mode is ever switched to Loiter, this program will exit.
-#@drone.on_attribute('mode')
+@drone.on_attribute('mode')
 def handle_mode_change(_, name, msg):
     if msg.name == 'LOITER':
         drone.close()
@@ -65,6 +65,8 @@ if __name__ == '__main__':
                 sys.exit(1)
         print(resp) # mostly checking this works
         waypoints=dict(wypts)
+        print "THESE ARE THE WAYPOINTS"
+        print waypoints
     else:
         print('Starting client as Auxiliary')
         r = requests.get('http://' + server_addr + ':' + port + '/computeStraightLinePath')
@@ -90,18 +92,19 @@ if __name__ == '__main__':
 
     #alt = float(waypoints['0']['alt'])
 
-    #home = drone.location.global_relative_frame
-
+    home = drone.location.global_relative_frame
+    alt = 10
     print('TAKING OFF')
-    #DronekitHelpers.takeoff(drone, alt)
+    DronekitHelpers.takeoff(drone, alt)
     print waypoints
     wypts = waypoints['waypoints']
     for wypt in wypts:
         lat = float(wypt[0])
         lon = float(wypt[1])
         #spd = float(wypt[2])
+        spd = 5
         print('Flying to: {}, {}'.format(lat, lon))
-        #DronekitHelpers.goto(drone, lat, lon, alt, spd)
+        DronekitHelpers.goto(drone, lat, lon, alt, spd)
 
     print('Path Complete')
     #print('COMING HOME')
