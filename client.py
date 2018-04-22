@@ -48,11 +48,13 @@ if __name__ == '__main__':
     server_addr = '127.0.0.1'
     port = '5000'
 
-    # Connect Drone 
+    # Connect Drone
+    connection_string = '/dev/ttyUSB0'
     #connection_string = '/dev/ttyUSB0'
     # ^Set this to the usb port where telem is plugged in (e.g., /dev/ttyUSB0)
-    #drone = connect_vehicle(connection_string)
+    drone = connect_vehicle(connection_string)
 
+'''
     # connect to server
     if (lead_drone):
         print('Starting client as Lead')
@@ -77,7 +79,7 @@ if __name__ == '__main__':
         else:
                 print('Error: {} Response'.format(r.status_code))
                 sys.exit(1)
-
+'''
     # i imagine it will be in this format
     # {0 :
     #       {lat :  4, long : 5, alt : 24, spd : 5 },
@@ -91,7 +93,7 @@ if __name__ == '__main__':
     print('STARTING UP')
 
     #alt = float(waypoints['0']['alt'])
-
+    waypoints=dict(wypts)
     home = drone.location.global_relative_frame
     alt = 10
     print('TAKING OFF')
