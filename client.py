@@ -4,10 +4,11 @@ import json
 import sys
 from leader_waypoints import wypts
 
-#import dronekit
-#from client_util import DronekitHelpers
+import dronekit
+from client_utils import DronekitHelpers
 
 lead_drone = False
+
 
 ### FUNCTIONS ###
 
@@ -24,6 +25,9 @@ def connect_vehicle(connection_string, baud=57600):
                 time.sleep(1.0)
 
         return vehicle
+
+connection_string = '/dev/ttyUSB0'
+drone = DronekitHelpers.connect_vehicle(connection_string)#connect_vehicle(connection_string)
 
 # Register a callback: if the mode is ever switched to Loiter, this program will exit.
 @drone.on_attribute('mode')
@@ -49,12 +53,12 @@ if __name__ == '__main__':
     port = '5000'
 
     # Connect Drone
-    connection_string = '/dev/ttyUSB0'
+    #connection_string = '/dev/ttyUSB0'
     #connection_string = '/dev/ttyUSB0'
     # ^Set this to the usb port where telem is plugged in (e.g., /dev/ttyUSB0)
-    drone = connect_vehicle(connection_string)
+    #drone = connect_vehicle(connection_string)
 
-'''
+    '''
     # connect to server
     if (lead_drone):
         print('Starting client as Lead')
@@ -79,7 +83,7 @@ if __name__ == '__main__':
         else:
                 print('Error: {} Response'.format(r.status_code))
                 sys.exit(1)
-'''
+    '''
     # i imagine it will be in this format
     # {0 :
     #       {lat :  4, long : 5, alt : 24, spd : 5 },
@@ -112,4 +116,4 @@ if __name__ == '__main__':
     #print('COMING HOME')
     #DronekitHelpers.goto(drone, *home_lla.as_array(), speed=2)
     print('Landing')
-    #DronekitHelpers.land(drone)
+    DronekitHelpers.land(drone)
