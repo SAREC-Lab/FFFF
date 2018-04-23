@@ -62,7 +62,7 @@ def computePath(leader_waypoints, offset_id = 1):
         'waypoints': unscaled_path,
         'distance': total_distance
     }
-    return json.dumps(output)
+    return output
 
 '''
 

@@ -1,5 +1,6 @@
 import requests
 import json
+from leader_waypoints import wypts
 
 host = '127.0.0.1'
 port = '5000'
@@ -35,8 +36,22 @@ waypoints = json.dumps(
 
 
 
-r = requests.post('http://127.0.0.1:5000/createLeadDrone', data = waypoints)
-print r.text
+server_addr = '127.0.0.1'
+port = '5000'
+r = requests.post('http://' + server_addr + ':' + port + '/createLeadDrone', data=json.dumps(wypts))
+if r.status_code == 200:
+    resp = json.loads(r.content)
+else:
+    print('Error: {} Response'.format(r.status_code))
+    sys.exit(1)
+waypoints=resp['waypoints']
+print "Leader Waypoints::"
+print waypoints
+print '\n\n'
 
-r = requests.get('http://127.0.0.1:5000/computeStraightLinePath')
-print r.text
+r = requests.get('http://' + server_addr + ':' + port + '/computeStraightLinePath')
+if r.status_code == 200:
+    resp = json.loads(r.content)
+waypoints = resp['waypoints'] #dict(resp['waypoints'])
+print 'Aux Waypoints::'
+print waypoints

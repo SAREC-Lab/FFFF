@@ -14,6 +14,7 @@ class Drone(object):
         self.number = number
         self.lead = not self.number # lead is true if number == 0
         self.path = None
+        self.path_distance = 0
 
 lead_drone = Drone(0)
 
@@ -37,13 +38,17 @@ def createLeadDrone():
     resp['waypoints'] = lead_drone.path
     resp['text'] = "Creating lead drone"
     resp['result'] = "Success"
+    lead_drone.path_distance = total_distance
     return json.dumps(resp)
 
 @app.route('/computeStraightLinePath', methods=['GET'])
 def returnComputedStraightLinePath():
     if request.method == 'GET':
-        output = computePath(lead_drone.path, 1)
-        return output
+        resp = computePath(lead_drone.path, 1)
+        resp['text'] = 'Generatign path for auxillary drone'
+        resp['result'] = 'Success'
+        resp['lead_drone_distance'] = lead_drone.path_distance
+        return json.dumps(resp)
     else:
         pass
 
