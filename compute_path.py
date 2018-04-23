@@ -58,8 +58,9 @@ def computePath(leader_waypoints, offset_id = 1):
     for i in range(len(unscaled_path) - 1):
         total_distance += getDistanceMeters(unscaled_path[i][0], unscaled_path[i][1], unscaled_path[i + 1][0], unscaled_path[i + 1][1])
     
+    shifted_unscaled_path = unscaled_path[16:] + unscaled_path[:16]
     output = {
-        'waypoints': unscaled_path,
+        'waypoints': shifted_unscaled_path,
         'distance': total_distance
     }
     return output
