@@ -72,6 +72,9 @@ def returnComputedStraightLinePath():
 @app.route('/continuePath', methods=['POST'])
 def continuePath():
     d_id = int(json.loads(request.data)['drone_id'])
+    #for d in drone_list:
+     #   if d_id == d.number:
+      #      d.ready = True
     drone_list[d_id].ready = True
     resp = {}
     for d in drone_list:
@@ -79,9 +82,13 @@ def continuePath():
             resp['continue'] = 1
             return json.dumps(resp)
     resp['continue'] = 0
-    # reset all "ready" statuses for next check-in
+    return json.dumps(resp)
+
+@app.route('/passedCheckpoint', methods=['GET'])
+def passedCheckpoints():
     for d in drone_list:
         d.ready = False
+    resp = {'result' : 'success'}
     return json.dumps(resp)
 
 @app.route('/pathComplete', methods=['POST'])

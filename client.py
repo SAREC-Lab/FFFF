@@ -73,6 +73,7 @@ if __name__ == '__main__':
             print('Error: {} Response'.format(r.status_code))
             sys.exit(1)
         waypoints = resp['waypoints']
+        time.sleep(10)
     
     else:
         print('Starting client as Auxiliary')
@@ -113,6 +114,7 @@ if __name__ == '__main__':
             spd = BASE_SPEED
             print('Flying to: {}, {}'.format(lat, lon))
             DronekitHelpers.goto(drone, lat, lon, alt, spd)
+            #time.sleep(1) # for testing
             if i == 0: # starting position
                 command = raw_input('Press any key and enter to go')
             # check w server that all drones are ready
@@ -121,9 +123,12 @@ if __name__ == '__main__':
             while cont:
                 # wait until all drones ready
                 print("Drone 0 waiting")
-                time.sleep(0.5)
+                #time.sleep(0.5)
                 cr = requests.post('http://' + server_addr + ':' + port + '/continuePath', data=json.dumps(id_data))
                 cont = json.loads(cr.content)['continue']
+            time.sleep(1) # give server time to respond to all "continue" queries
+            # notify the server that we're proceeding
+            pr = requests.get('http://' + server_addr + ':' + port + '/passedCheckpoint')
 
     else:
         for i, wypt in enumerate(waypoints):
@@ -132,6 +137,7 @@ if __name__ == '__main__':
             spd = BASE_SPEED * (resp['lead_drone_distance'] / resp['distance']) 
             print('Flying to: {}, {}'.format(lat, lon))
             DronekitHelpers.goto(drone, lat, lon, alt, spd)
+            #time.sleep(2) # for testing
             if i == 0:
                 command = raw_input('Press any key and enter to go')
             if wypt in checkpoints:
@@ -139,7 +145,7 @@ if __name__ == '__main__':
                 cont = json.loads(cr.content)['continue']
                 while cont:
                     print("Drone {} waiting".format(drone_id))
-                    time.sleep(0.5)
+                    #time.sleep(0.5)
                     cr = requests.post('http://' + server_addr + ':' + port + '/continuePath', data=json.dumps(id_data))
                     cont = json.loads(cr.content)['continue']
             
@@ -149,6 +155,6 @@ if __name__ == '__main__':
     # this request just pops the drone from the server's list of drones
     requests.post('http://' + server_addr + ':' + port + '/pathComplete', data=json.dumps(id_data))
     #print('COMING HOME')
-    #DronekitHelpers.goto(drone, *home_lla.as_array(), speed=2)
+    DronekitHelpers.goto(drone, *home_lla.as_array(), speed=2)
     print('Landing')
     DronekitHelpers.land(drone)
