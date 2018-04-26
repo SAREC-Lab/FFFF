@@ -111,10 +111,9 @@ if __name__ == '__main__':
             lat = float(wypt[0])
             lon = float(wypt[1])
             spd = BASE_SPEED
+            print('Flying to: {}, {}'.format(lat, lon))
+            DronekitHelpers.goto(drone, lat, lon, alt, spd)
             if i == 0: # starting position
-                # technically this makes the drone go to this waypoint 2x
-                # but i think that's fine
-                DronekitHelpers.goto(drone, lat, lon, alt, spd)
                 command = raw_input('Press any key and enter to go')
             # check w server that all drones are ready
             cr = requests.post('http://' + server_addr + ':' + port + '/continuePath', data=json.dumps(id_data))
@@ -125,16 +124,15 @@ if __name__ == '__main__':
                 time.sleep(0.5)
                 cr = requests.post('http://' + server_addr + ':' + port + '/continuePath', data=json.dumps(id_data))
                 cont = json.loads(cr.content)['continue']
-            print('Flying to: {}, {}'.format(lat, lon))
-            DronekitHelpers.goto(drone, lat, lon, alt, spd)
 
     else:
         for i, wypt in enumerate(waypoints):
             lat = float(wypt[0])
             lon = float(wypt[1])
             spd = BASE_SPEED * (resp['lead_drone_distance'] / resp['distance']) 
+            print('Flying to: {}, {}'.format(lat, lon))
+            DronekitHelpers.goto(drone, lat, lon, alt, spd)
             if i == 0:
-                DronekitHelpers.goto(drone, lat, lon, alt, spd)
                 command = raw_input('Press any key and enter to go')
             if wypt in checkpoints:
                 cr = requests.post('http://' + server_addr + ':' + port + '/continuePath', data=json.dumps(id_data))
@@ -144,8 +142,7 @@ if __name__ == '__main__':
                     time.sleep(0.5)
                     cr = requests.post('http://' + server_addr + ':' + port + '/continuePath', data=json.dumps(id_data))
                     cont = json.loads(cr.content)['continue']
-            print('Flying to: {}, {}'.format(lat, lon))
-            DronekitHelpers.goto(drone, lat, lon, alt, spd)
+            
 
     print('Path Complete')
     # make sure we don't accidentally get any drone stuck in a loop
